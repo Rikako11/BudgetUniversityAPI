@@ -12,27 +12,27 @@ app.config['SQLALCHEMY_ECHO'] = True
 db.init_app(app)
 with app.app_context():
     db.create_all()
-    
+
 @app.route('/')
 @app.route('/api/budget/')
-def get_budget():
-    budget = Budget.query.all()
-    #Category.query.delete()
-    #Budget.query.delete()
-    #db.session.commit()
-    res = {'success': True, 'data': [budget.serialize() for variables in budget]} 
+def get_budgets():
+    budgets = Budget.query.all()
+    res = {'success': True, 'data': [budget.serialize() for budget in budgets]} 
     return json.dumps(res), 200
 
-@app.route('/api/budget/', methods=['PUT'])
+@app.route('/api/budget/', methods=['POST'])
 def create_budget():
     budget_body = json.loads(request.data)
-
-    budget = Budget(
-		total = buget_body.get('total')
-        username = budget_body.get('username')
-    )
+    budget = Budget.query.filter_by(username=budget_body.get('username')).first()
+    if budget is None: 
+        budget = Budget(
+	   total = budget_body.get('total'),
+           username = budget_body.get('username')
+        )
 	
-    db.session.add(budget)
+        db.session.add(budget)
+    else:
+       budget.total = budget_body.get('total') 
     db.session.commit()
     return json.dumps({'success': True, 'data': budget.serialize()}), 201
 
@@ -41,23 +41,23 @@ def get_budget(budget_id):
     budget = Budget.query.filter_by(id=budget_id).first() 
     if budget is not None:
         return json.dumps({'success': True, 'data': budget.serialize()}), 200
-    return json.dumps({'success': False, 'error': 'Budget not found!'}), 404
+    return json.dumps({'success': False, 'error': 'Budget not found!'}), 404  
 	
-@app.route('/api/budget/<int:budget_id>/<int:category_id>', methods=['POST'])
-def spend_budget(budget_id):
+@app.route('/api/budget/<int:budget_id>/<string:category_name>/', methods=['POST'])
+def spend_budget(budget_id, category_name):
     budget = Budget.query.filter_by(id=budget_id).first()
     if budget is not None:
-		category = Category.query.filter_by(budget_id=budget_id, id=category_id).first()
-		if category is not None:
-			budget_body = json.loads(request.data)
-			budget.spent += budget_body.get('spent', budget.spent)
-			category.total += budget_body.get('spent', budget.spent)
-			if budget.spent <= budget.total:
-				db.session.commit()
-			else:
-				return json.dumps({'success': False, 'error': 'You are spending overbudget!'})
+        category = Category.query.filter_by(budget_id=budget_id, name=category_name).first()
+        if category is not None:
+            budget_body = json.loads(request.data)
+            budget.spent += budget_body.get('spent', budget.spent)
+            category.total += budget_body.get('spent', budget.spent)
+            if budget.spent <= budget.total:
+                db.session.commit()
+            else:
+                return json.dumps({'success': False, 'error': 'You are spending overbudget!'})
         else:
-			return json.dumps({'success': False, 'error': 'Category not found!'}), 404
+            return json.dumps({'success': False, 'error': 'Category not found!'}), 404
         return json.dumps({'success': True, 'data': budget.serialize()}), 200
     return json.dumps({'success': False, 'error': 'Budget not found!'}), 404
 
@@ -84,9 +84,8 @@ def create_category(budget_id):
     if budget is not None:
         category_body = json.loads(request.data)
         category = Category(
-			name = category_body.get('name'),
-		    total = 0,
-            username = category_body.get('username'),
+            name = category_body.get('name'),
+            total = 0,
             budget_id = budget.id
         )
         budget.categories.append(category)
