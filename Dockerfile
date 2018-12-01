@@ -1,4 +1,4 @@
-FROM ubuntu:14.04
+FROM alpine:3.4
 RUN apk add python3 # install python3
 
 COPY . . # copy local files into the container
