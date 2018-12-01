@@ -1,4 +1,7 @@
 # BudgetUniversityAPI
+
+Use http://35.196.31.92/ before each command! Ex. http://35.196.31.92/api/budget/
+
 GET '/api/budget/'
 
 Gets all individual budget of each user
