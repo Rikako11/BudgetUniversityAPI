@@ -1,4 +1,4 @@
-FROM alpine # alpine is a lightweight Linux distribution
+FROM ubuntu:14.04
 RUN apk add python3 # install python3
 
 COPY . . # copy local files into the container
