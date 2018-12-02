@@ -52,10 +52,17 @@ BODY:
 Adds new category into budget id
 
 
-POST 'api/budget//<int:budget_id>/<string:category_name>/'
+POST 'api/budget/<int:budget_id>/<string:category_name>/'
 
 BODY:
 {
    "name": Chipotle,
    "total": 10
 }
+
+Adds item to the category 
+
+GET 'api/budget/<int:budget_id>/<string:category_name>/'
+
+Gets all the items in that category
+
