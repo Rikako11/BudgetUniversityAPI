@@ -3,7 +3,14 @@
 Use http://35.196.31.92/ before each command! Ex. http://35.196.31.92/api/budget/
 
 GET '/api/budget/'  
-Gets all individual budget of each user
+Gets all individual budget of each user  
+RESPONSE:  
+[{  
+"id": 1,
+"total": 200,
+"spent": 0,
+"username": ro99
+}]
 
 POST '/api/budget/'  
 BODY:
