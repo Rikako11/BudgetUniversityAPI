@@ -50,3 +50,12 @@ BODY:
 }
 
 Adds new category into budget id
+
+
+POST 'api/budget//<int:budget_id>/<string:category_name>/'
+
+BODY:
+{
+   "name": Chipotle,
+   "total": 10
+}
