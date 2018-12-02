@@ -4,13 +4,11 @@ Use http://35.196.31.92/ before each command! Ex. http://35.196.31.92/api/budget
 
 GET '/api/budget/'  
 Gets all individual budget of each user  
-RESPONSE:  
-[{  
-"id": 1,
+RESPONSE: {"success": "true", "data": [{"id": 1,
 "total": 200,
 "spent": 0,
 "username": ro99
-}]
+}]}
 
 POST '/api/budget/'  
 BODY:
@@ -38,8 +36,10 @@ Deletes budget id
 
 
 GET '/api/budget/<int:budget_id>/categories/'  
-Gets all categories from budget id
-
+Gets all categories from budget id  
+RESPONSE: {"success": "true", "data" [{"name": "Food",
+"total": 30
+}]}
 
 POST '/api/budget/<int:budget_id>/category/'  
 BODY: 
