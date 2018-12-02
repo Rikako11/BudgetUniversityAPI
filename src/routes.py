@@ -108,7 +108,7 @@ def create_category(budget_id):
     if budget is not None:
         category_body = json.loads(request.data)
         category_name = category_body.get('name')
-        category = Category.query.filter_by(budget_id=budget_id, name=category_name).first()
+        category = Category.query.filter_by(budget_id=budget.id, name=category_name).first()
         if category is None:
             category = Category(
                 name = category_name,
