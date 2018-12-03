@@ -26,9 +26,10 @@ Gets the budget from budget_id
 POST '/api/budget/<int:budget_id>/<string:category_name>/'  
 BODY:
 {
-  "spent": 300
+  "name": Chipotle
+  "spent": 10
 }  
-Adds money spent to budget id 
+Adds money spent to budget id with the item in category
 
 
 DELETE '/api/budget/<int:budget_id>/'  
